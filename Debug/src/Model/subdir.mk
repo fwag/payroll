@@ -17,7 +17,7 @@ CPP_DEPS += \
 src/Model/%.o: ../src/Model/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -std=c++0x -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc" -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc/Transactions" -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc/PayrollDatabase" -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc/Model" -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc/Model/PaymentMethod" -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc/Model/PaymentClassification" -I"/home/tmbnxvmuser/Devel/TBM2/Payroll/inc/Model/PaymentSchedule" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	g++ -std=c++0x -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc" -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc/Model" -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc/Model/PaymentClassification" -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc/Model/PaymentMethod" -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc/Model/PaymentSchedule" -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc/PayrollDatabase" -I"/home/tmbnxvmuser/Devel/TBM2/payroll/inc/Transactions" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

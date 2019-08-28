@@ -11,6 +11,8 @@
 #include "PaymentMethod.h"
 #include <string>
 
+using namespace std;
+
 namespace Payroll {
 
 class MailMethod : public PaymentMethod {
