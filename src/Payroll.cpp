@@ -6,10 +6,10 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
-using namespace std;
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
-#include "catch.hpp"
+
+#include <iostream>
+#include <ctime>
 
 #include "Employee.h"
 #include "AddSalariedEmployee.h"
@@ -20,8 +20,11 @@ using namespace std;
 #include "HoldMethod.h"
 #include "MailMethod.h"
 #include "MonthlySchedule.h"
+#include "HourlyClassification.h"
+#include "catch.hpp"
 
 using namespace Payroll;
+using namespace std;
 
 TEST_CASE( "Payroll - add salaried employee", "[simple-add-salaried-employee]" )
 {
@@ -59,4 +62,29 @@ TEST_CASE( "Payroll - add salaried employee", "[simple-add-salaried-employee]" )
 	}
 
 	REQUIRE(false == failedConv);
+}
+
+TEST_CASE( "Payroll - test hourly classification", "[simple-hourly-classification]" )
+{
+	   tm* timeinfo;
+	   time_t rawtime;
+
+	   time ( &rawtime );
+	   timeinfo = localtime ( &rawtime );
+	   timeinfo->tm_year = 2019-1900;
+	   timeinfo->tm_mon = 8 -1;
+	   timeinfo->tm_mday = 29;
+
+	   rawtime = mktime(timeinfo);
+
+	   TimeCard tc {rawtime, 12};
+
+	   HourlyClassification hc {11};
+	   hc.AddTimeCard(tc);
+
+	   TimeCard tc2 = hc.GetTimeCard(rawtime);
+
+	   REQUIRE (tc.GetDate() == tc2.GetDate());
+
+	   REQUIRE (hc.CalculatePay(rawtime) == 154.0);
 }

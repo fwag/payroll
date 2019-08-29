@@ -31,6 +31,8 @@ public:
 	{}
 
 	float CalculatePay (time_t date) final;
+	void AddTimeCard(TimeCard card);
+	TimeCard GetTimeCard(time_t date);
 };
 
 } /* namespace Payroll */
