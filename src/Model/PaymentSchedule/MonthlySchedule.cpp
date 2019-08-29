@@ -28,11 +28,11 @@ int MonthlySchedule::GetLastMonthDay (int month, int year)
    }
 }
 
-bool MonthlySchedule::IsPayday(time_t date)
+bool MonthlySchedule::IsPayday(Date date)
 {
 	bool res = false;
 	int lastMonthDay;
-	tm *ltm = localtime(&date);
+	tm *ltm = date.GetTimeinfo();
 
 	lastMonthDay = GetLastMonthDay (ltm->tm_mon, ltm->tm_year+1900);
 

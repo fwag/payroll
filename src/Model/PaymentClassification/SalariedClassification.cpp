@@ -9,7 +9,7 @@
 
 namespace Payroll {
 
-float SalariedClassification::CalculatePay(time_t date)
+float SalariedClassification::CalculatePay(Date date)
 {
 	(void)date;
 

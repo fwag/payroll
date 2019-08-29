@@ -9,10 +9,10 @@
 
 namespace Payroll {
 
-bool WeeklySchedule::IsPayday(time_t date)
+bool WeeklySchedule::IsPayday(Date date)
 {
 	bool res = false;
-	tm *ltm = localtime(&date);
+	tm *ltm = date.GetTimeinfo();
 
 	if (ltm->tm_wday == LAST_WEEK_DAY)
 	{

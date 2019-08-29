@@ -12,6 +12,7 @@
 #include "TimeCard.h"
 #include <vector>
 #include <ctime>
+#include "Date.h"
 
 using namespace std;
 
@@ -30,9 +31,9 @@ public:
 		hourlyRate{hourlyRate}
 	{}
 
-	float CalculatePay (time_t date) final;
+	float CalculatePay (Date date) final;
 	void AddTimeCard(TimeCard card);
-	TimeCard GetTimeCard(time_t date);
+	TimeCard GetTimeCard(Date date);
 };
 
 } /* namespace Payroll */

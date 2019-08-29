@@ -10,12 +10,13 @@
 
 #include "PaymentSchedule.h"
 #include <ctime>
+#include "Date.h"
 
 namespace Payroll {
 
 class WeeklySchedule : public PaymentSchedule {
 public:
-	bool IsPayday (time_t date) final;
+	bool IsPayday (Date date) final;
 };
 
 } /* namespace Payroll */

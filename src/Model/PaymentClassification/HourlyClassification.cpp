@@ -21,17 +21,16 @@ float HourlyClassification::CalculateDailyRate (int hours)
 	return pay;
 }
 
-float HourlyClassification::CalculatePay (time_t date)
+float HourlyClassification::CalculatePay (Date date)
 {
-	tm *payDate = localtime(&date);
+	tm *payDate = date.GetTimeinfo();
 	vector<TimeCard>::iterator it;
 	float pay = 0.0;
 	tm *tcDate;
 
 	for (it = timecards.begin(); it != timecards.end(); it++)
 	{
-		time_t tcDate_t = (*it).GetDate();
-		tcDate = localtime(&tcDate_t);
+		tcDate = (*it).GetDate().GetTimeinfo();
 		if (tcDate->tm_mday >= payDate->tm_mday)
 		{
 			pay += CalculateDailyRate((*it).GetHours());
@@ -45,22 +44,15 @@ void HourlyClassification::AddTimeCard (TimeCard card)
 	timecards.push_back(card);
 }
 
-TimeCard HourlyClassification::GetTimeCard (time_t date)
+TimeCard HourlyClassification::GetTimeCard (Date date)
 {
-	TimeCard ret {0, -1.0};
-
 	vector<TimeCard>::iterator it;
 	it = find_if(timecards.begin(), timecards.end(), [&date](TimeCard tc){
-		time_t rawtime = tc.GetDate();
-		tm* ltm1 = localtime(&rawtime);
-		tm* ltm2 = localtime(&date);
-		return ((ltm1->tm_year == ltm2->tm_year) &&
-				(ltm1->tm_mon == ltm2->tm_mon) &&
-				(ltm1->tm_mday == ltm2->tm_mday));
+		return date == tc.GetDate();
 	});
 
-	if (it != timecards.end()) ret = *it;
-	return ret;
+	//if (it != timecards.end()) ret = *it;
+	return *it;
 }
 
 } /* namespace Payroll */

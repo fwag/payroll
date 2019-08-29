@@ -22,6 +22,7 @@
 #include "MonthlySchedule.h"
 #include "HourlyClassification.h"
 #include "catch.hpp"
+#include "Date.h"
 
 using namespace Payroll;
 using namespace std;
@@ -41,7 +42,7 @@ TEST_CASE( "Payroll - add salaried employee", "[simple-add-salaried-employee]" )
 	bool failedConv = false;
 	shared_ptr<SalariedClassification> sc = dynamic_pointer_cast<SalariedClassification>(e.classification);
 	if (sc != nullptr)
-		REQUIRE(1000.00 == sc->salary);
+		REQUIRE(1000.00 == sc->GetSalary());
 	else
 		failedConv = true;
 	REQUIRE(false == failedConv);
@@ -66,25 +67,16 @@ TEST_CASE( "Payroll - add salaried employee", "[simple-add-salaried-employee]" )
 
 TEST_CASE( "Payroll - test hourly classification", "[simple-hourly-classification]" )
 {
-	   tm* timeinfo;
-	   time_t rawtime;
-
-	   time ( &rawtime );
-	   timeinfo = localtime ( &rawtime );
-	   timeinfo->tm_year = 2019-1900;
-	   timeinfo->tm_mon = 8 -1;
-	   timeinfo->tm_mday = 29;
-
-	   rawtime = mktime(timeinfo);
-
-	   TimeCard tc {rawtime, 12};
+	   Date date("29/08/2019");
+	   TimeCard tc {date, 12};
 
 	   HourlyClassification hc {11};
 	   hc.AddTimeCard(tc);
 
-	   TimeCard tc2 = hc.GetTimeCard(rawtime);
+	   TimeCard tc2 = hc.GetTimeCard(date);
 
+	   Date date2("30/09/2019");
 	   REQUIRE (tc.GetDate() == tc2.GetDate());
 
-	   REQUIRE (hc.CalculatePay(rawtime) == 154.0);
+	   REQUIRE (hc.CalculatePay(date) == 154.0);
 }

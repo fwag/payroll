@@ -9,6 +9,7 @@
 #define PAYMENTSCHEDULE_H_
 
 #include <ctime>
+#include "Date.h"
 
 namespace Payroll {
 
@@ -17,7 +18,7 @@ protected:
 	const int LAST_WEEK_DAY = 5;
 
 public:
-	virtual bool IsPayday(time_t date) = 0;
+	virtual bool IsPayday(Date date) = 0;
 };
 
 } /* namespace Payroll */

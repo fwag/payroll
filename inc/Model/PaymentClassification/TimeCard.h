@@ -8,15 +8,17 @@
 #ifndef TIMECARD_H_
 #define TIMECARD_H_
 
+#include "Date.h"
+
 namespace Payroll {
 
 class TimeCard {
 private:
-	time_t date;
+	Date date;
 	float hours;
 
 public:
-	TimeCard(time_t date, float hours):
+	TimeCard(Date date, float hours):
 		date{date},
 		hours{hours}
 	{}
@@ -26,7 +28,7 @@ public:
 		return hours;
 	}
 
-	time_t GetDate()
+	Date GetDate()
 	{
 		return date;
 	}

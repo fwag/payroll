@@ -10,12 +10,13 @@
 
 #include "PaymentSchedule.h"
 #include <ctime>
+#include "Date.h"
 
 namespace Payroll {
 
 class MonthlySchedule : public PaymentSchedule {
 public:
-	bool IsPayday (time_t date);
+	bool IsPayday (Date date);
 private:
 	int GetLastMonthDay (int month, int year);
 
