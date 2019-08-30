@@ -74,6 +74,11 @@ Date::Date (string date)
 	}
 }
 
+Date::Date (time_t unixts) : unixts{unixts}
+{
+
+}
+
 bool Date::operator==(const Date& date) const
 {
 	tm tmp_l_time, tmp_c_time;
@@ -85,6 +90,69 @@ bool Date::operator==(const Date& date) const
 	return ((c_time->tm_year == l_time->tm_year) &&
 			(c_time->tm_mon == l_time->tm_mon) &&
 			(c_time->tm_mday == l_time->tm_mday));
+}
+
+DayOfWeek Date::GetDayOfWeek()
+{
+	DayOfWeek dow;
+	tm *ltm = this->GetTimeinfo();
+
+	switch (ltm->tm_wday) {
+	case 0:
+		dow = DayOfWeek::Sunday;
+		break;
+	case 1:
+		dow = DayOfWeek::Monday;
+		break;
+	case 2:
+		dow = DayOfWeek::Tuesday;
+		break;
+	case 3:
+		dow = DayOfWeek::Wednesday;
+		break;
+	case 4:
+		dow = DayOfWeek::Thursday;
+		break;
+	case 5:
+		dow = DayOfWeek::Friday;
+		break;
+	case 6:
+		dow = DayOfWeek::Saturday;
+		break;
+	}
+
+	return dow;
+}
+
+int Date::GetLastDayOfMonth (int month, int year)
+{
+   if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+       return 31;
+   else if(month == 4 || month == 6 || month == 9 || month == 11)
+       return 30;
+   else {
+       if(year % 4 == 0) {
+           if(year % 100 == 0) {
+               if(year % 400 == 0)
+                   return 29;
+               return 28;
+           }
+           return 29;
+       }
+       return 28;
+   }
+}
+
+int Date::Days2Seconds (int days)
+{
+	return days*86400;
+}
+
+Date Date::AddDays (int days)
+{
+	time_t newUnixTs = unixts+Days2Seconds(days);
+	Date newDate{newUnixTs};
+	return newDate;
 }
 
 string Date::ToString()

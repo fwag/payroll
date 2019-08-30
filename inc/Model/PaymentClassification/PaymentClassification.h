@@ -9,7 +9,7 @@
 #define PAYMENTCLASSIFICATION_H_
 
 #include <ctime>
-#include "Date.h"
+#include "Paycheck.h"
 
 namespace Payroll {
 
@@ -18,7 +18,7 @@ public:
 	PaymentClassification();
 	virtual ~PaymentClassification();
 
-	virtual float CalculatePay(Date date) = 0;
+	virtual float CalculatePay(Paycheck paycheck) = 0;
 
 };
 

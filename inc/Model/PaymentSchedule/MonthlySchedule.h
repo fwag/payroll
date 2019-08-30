@@ -17,6 +17,8 @@ namespace Payroll {
 class MonthlySchedule : public PaymentSchedule {
 public:
 	bool IsPayday (Date date);
+	Date GetPayPeriodStartDate (Date date);
+
 private:
 	int GetLastMonthDay (int month, int year);
 

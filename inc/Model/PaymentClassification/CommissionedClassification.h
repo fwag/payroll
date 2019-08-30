@@ -30,7 +30,7 @@ public:
 		commissionRate{commissionRate}
 	{}
 
-	float CalculatePay (Date date);
+	float CalculatePay (Paycheck paycheck);
 
 
 

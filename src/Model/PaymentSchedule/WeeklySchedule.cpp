@@ -12,14 +12,18 @@ namespace Payroll {
 bool WeeklySchedule::IsPayday(Date date)
 {
 	bool res = false;
-	tm *ltm = date.GetTimeinfo();
 
-	if (ltm->tm_wday == LAST_WEEK_DAY)
+	if (date.GetDayOfWeek() == DayOfWeek::Friday)
 	{
 		res = true;
 	}
 
 	return res;
+}
+
+Date WeeklySchedule::GetPayPeriodStartDate (Date date)
+{
+	return date.AddDays(-6);
 }
 
 } /* namespace Payroll */

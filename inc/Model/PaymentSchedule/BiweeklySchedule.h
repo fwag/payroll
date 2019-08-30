@@ -17,6 +17,7 @@ namespace Payroll {
 class BiweeklySchedule : public PaymentSchedule {
 public:
 	bool IsPayday (Date date) final;
+	Date GetPayPeriodStartDate (Date date);
 };
 
 } /* namespace Payroll */

@@ -21,17 +21,18 @@ float HourlyClassification::CalculateDailyRate (int hours)
 	return pay;
 }
 
-float HourlyClassification::CalculatePay (Date date)
+float HourlyClassification::CalculatePay (Paycheck paycheck)
 {
-	tm *payDate = date.GetTimeinfo();
+	//tm *payDate = date.GetTimeinfo();
 	vector<TimeCard>::iterator it;
 	float pay = 0.0;
-	tm *tcDate;
+	//tm *tcDate;
 
 	for (it = timecards.begin(); it != timecards.end(); it++)
 	{
-		tcDate = (*it).GetDate().GetTimeinfo();
-		if (tcDate->tm_mday >= payDate->tm_mday)
+		//tcDate = (*it).GetDate().GetTimeinfo();
+		//if (tcDate->tm_mday >= payDate->tm_mday)
+		if (paycheck.IsInPayPeriod((*it).GetDate()))
 		{
 			pay += CalculateDailyRate((*it).GetHours());
 		}

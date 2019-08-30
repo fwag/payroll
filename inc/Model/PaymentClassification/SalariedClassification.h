@@ -9,7 +9,7 @@
 #define SALARIEDCLASSIFICATION_H_
 
 #include "PaymentClassification.h"
-#include "Date.h"
+#include "Paycheck.h"
 
 namespace Payroll {
 
@@ -20,7 +20,7 @@ private:
 public:
 	SalariedClassification(float salary) : salary{salary} {};
 
-	float CalculatePay (Date date);
+	float CalculatePay (Paycheck paycheck);
 	float GetSalary() { return salary; }
 };
 

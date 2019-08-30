@@ -14,9 +14,6 @@
 namespace Payroll {
 
 class PaymentSchedule {
-protected:
-	const int LAST_WEEK_DAY = 5;
-
 public:
 	virtual bool IsPayday(Date date) = 0;
 };

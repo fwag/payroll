@@ -9,39 +9,29 @@
 
 namespace Payroll {
 
-int MonthlySchedule::GetLastMonthDay (int month, int year)
-{
-   if(month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11)
-       return 31;
-   else if(month == 3 || month == 5 || month == 8 || month == 10)
-       return 30;
-   else {
-       if(year % 4 == 0) {
-           if(year % 100 == 0) {
-               if(year % 400 == 0)
-                   return 29;
-               return 28;
-           }
-           return 29;
-       }
-       return 28;
-   }
-}
 
 bool MonthlySchedule::IsPayday(Date date)
 {
 	bool res = false;
-	int lastMonthDay;
-	tm *ltm = date.GetTimeinfo();
+	int lastDayOfMonth;
 
-	lastMonthDay = GetLastMonthDay (ltm->tm_mon, ltm->tm_year+1900);
+	lastDayOfMonth = Date::GetLastDayOfMonth (date.GetMonth(), date.GetYear());
 
-	if (ltm->tm_mday == lastMonthDay)
+	if (date.GetDay() == lastDayOfMonth)
 	{
 		res = true;
 	}
 
 	return res;
+}
+
+Date MonthlySchedule::GetPayPeriodStartDate (Date date)
+{
+	int days = 0;
+	while(date.AddDays(days - 1).GetMonth() == date.GetMonth())
+		days--;
+
+	return date.AddDays(days);
 }
 
 } /* namespace Payroll */

@@ -9,17 +9,14 @@
 
 namespace Payroll {
 
-float CommissionedClassification::CalculatePay(Date date)
+float CommissionedClassification::CalculatePay(Paycheck paycheck)
 {
 	vector<SalesReceipt>::iterator it;
 	float salesTotal = 0.0;
-	tm *tcDate;
-	tm *payDate = date.GetTimeinfo();
 
 	for (it = salesReceipts.begin(); it != salesReceipts.end(); it++)
 	{
-		tcDate = (*it).GetDate().GetTimeinfo();
-		if (tcDate->tm_mday >= payDate->tm_mday)
+		if (paycheck.IsInPayPeriod((*it).GetDate()))
 		{
 			salesTotal += (*it).GetAmount();
 		}

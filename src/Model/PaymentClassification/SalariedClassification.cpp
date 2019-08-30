@@ -9,9 +9,9 @@
 
 namespace Payroll {
 
-float SalariedClassification::CalculatePay(Date date)
+float SalariedClassification::CalculatePay(Paycheck paycheck)
 {
-	(void)date;
+	(void)paycheck;
 
 	return salary;
 }
