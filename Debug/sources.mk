@@ -31,4 +31,5 @@ src/Model/PaymentSchedule \
 src/Model/PaymentMethod \
 src/Model/PaymentClassification \
 src/Model \
+src/Model/Affiliation \
 

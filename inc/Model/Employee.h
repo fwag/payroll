@@ -14,6 +14,7 @@
 #include "PaymentClassification.h"
 #include "PaymentSchedule.h"
 #include "PaymentMethod.h"
+#include "Affiliation.h"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ public:
 	shared_ptr<PaymentClassification> classification;
 	shared_ptr<PaymentSchedule> schedule;
 	shared_ptr<PaymentMethod> method;
+	shared_ptr<Affiliation> affiliation;
 
 	Employee& operator=(const Payroll::Employee& e)
 	{
@@ -50,6 +52,7 @@ public:
 		classification = std::move(e.classification);
 		schedule = std::move(e.schedule);
 		method = std::move(e.method);
+		affiliation = std::move(e.affiliation);
 
 		return *this;
 	}

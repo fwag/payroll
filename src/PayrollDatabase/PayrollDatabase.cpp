@@ -10,6 +10,7 @@
 namespace Payroll {
 
 std::map<int, Employee> PayrollDatabase::employees = {};
+std::map<int, shared_ptr<Employee>> PayrollDatabase::unionMembers = {};
 
 
 } /* namespace Payroll */

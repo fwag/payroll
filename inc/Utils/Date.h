@@ -35,7 +35,12 @@ private:
 public:
 	Date (string date);
 	Date (time_t unixts);
+	Date(const Date& date)
+	{
+		this->unixts = date.GetUnixTimestamp();
+	}
 
+	void SetUnixTimestamp(time_t time) { this->unixts = time; }
 	time_t GetUnixTimestamp() const { return unixts; }
 	tm* GetTimeinfo() const { return localtime(&unixts); }
 
@@ -48,6 +53,12 @@ public:
 	Date AddDays (int days);
 	static int GetLastDayOfMonth (int month, int year);
 	string ToString();
+
+
+	Date& operator=(Date&& date) {
+		this->unixts = date.GetUnixTimestamp();
+		return *this;
+	}
 
 	bool operator==(const Date& date) const;
 

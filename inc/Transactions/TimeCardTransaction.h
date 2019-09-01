@@ -28,7 +28,7 @@ public:
 
 	void Execute()
 	{
-		unique_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+		shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 
 		if (e != nullptr)
 		{

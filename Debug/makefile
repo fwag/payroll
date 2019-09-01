@@ -14,6 +14,7 @@ RM := rm -rf
 -include src/Model/PaymentSchedule/subdir.mk
 -include src/Model/PaymentMethod/subdir.mk
 -include src/Model/PaymentClassification/subdir.mk
+-include src/Model/Affiliation/subdir.mk
 -include src/Model/subdir.mk
 -include src/subdir.mk
 -include subdir.mk

@@ -29,6 +29,7 @@
 #include "AddHourlyEmployee.h"
 #include "TimeCardTransaction.h"
 #include "SalesReceiptTransaction.h"
+#include "UnionAffiliation.h"
 
 using namespace Payroll;
 using namespace std;
@@ -39,7 +40,7 @@ TEST_CASE( "Payroll - add salaried employee", "[simple-add-salaried-employee]" )
 	AddSalariedEmployee t{empId, "Bob", "Home", 1000.0};
 	t.Execute();
 
-	unique_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE("Bob" == e->name);
 
 	//PaymentClassification pc = e.Classification;
@@ -97,7 +98,7 @@ TEST_CASE ( "Delete transaction test", "[simple-delete-transaction]")
 	int empId = 4;
 	AddCommissionedEmployee t {empId, "Bill", "Home", 2500, 3.2};
 	t.Execute();
-	unique_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE(e != nullptr);
 	DeleteEmployeeTransaction dt {empId};
 	dt.Execute();
@@ -112,7 +113,7 @@ TEST_CASE ( "Time card transaction test", "[simple-timecard-transaction]" )
 	t.Execute();
 	TimeCardTransaction tct {Date{"31/07/2005"}, 8.0, empId};
 	tct.Execute();
-	unique_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE(e != nullptr);
 	shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->classification);
 	REQUIRE(hc != nullptr);
@@ -128,7 +129,7 @@ TEST_CASE ( "Sales receipt transaction test", "[simple-salesreceipt-transaction]
 	t.Execute();
 	SalesReceiptTransaction tct {Date{"31/07/2005"}, 50.0, empId};
 	tct.Execute();
-	unique_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE(e != nullptr);
 	shared_ptr<CommissionedClassification> cc = dynamic_pointer_cast<CommissionedClassification>(e->classification);
 	REQUIRE(cc != nullptr);
@@ -142,13 +143,14 @@ TEST_CASE ( "Service charge transaction test", "[simple-servicecharge-transactio
 	int empId = 2;
 	AddHourlyEmployee t	{empId, "Bill", "Home", 15.25};
 	t.Execute();
-	unique_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
-#if 0
-	UnionAffiliation af = new UnionAffiliation();
-	e.Affiliation = af;
+
+	//UnionAffiliation af;
+	e->affiliation = make_shared<UnionAffiliation>();
 	int memberId = 86; // Maxwell Smart
-	PayrollDatabase.AddUnionMember(memberId, e);
+	PayrollDatabase::AddUnionMember(memberId, e);
+#if 0
 	ServiceChargeTransaction sct =
 	new ServiceChargeTransaction(
 	memberId, new DateTime(2005, 8, 8), 12.95);

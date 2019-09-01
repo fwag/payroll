@@ -29,6 +29,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/Model/PaymentClassification}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/Model/PaymentMethod}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/Model/PaymentSchedule}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/Model/Affiliation}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/PayrollDatabase}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/Transactions}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/payroll/inc/Utils}&quot;"/>
@@ -121,6 +122,7 @@
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/payroll"/>
 		</configuration>
+		<configuration configurationName="Release"/>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
