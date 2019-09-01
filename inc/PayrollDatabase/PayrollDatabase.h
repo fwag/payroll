@@ -10,6 +10,8 @@
 
 #include <map>
 #include "Employee.h"
+#include <memory>
+using namespace std;
 
 namespace Payroll {
 
@@ -23,7 +25,16 @@ public:
 		employees[id] = employee;
 	}
 
-	static Employee GetEmployee (int id) { return employees[id]; }
+	static unique_ptr<Employee> GetEmployee (int id) {
+		if (employees.find(id) != employees.end())
+		{
+			return unique_ptr<Employee>(new Employee{employees[id]});
+		} else {
+			return unique_ptr<Employee>{nullptr};
+		}
+	}
+
+	static void DeleteEmployee(int id) { employees.erase(id); }
 };
 
 } /* namespace Payroll */

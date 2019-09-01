@@ -45,15 +45,16 @@ void HourlyClassification::AddTimeCard (TimeCard card)
 	timecards.push_back(card);
 }
 
-TimeCard HourlyClassification::GetTimeCard (Date date)
+unique_ptr<TimeCard> HourlyClassification::GetTimeCard (Date date)
 {
 	vector<TimeCard>::iterator it;
 	it = find_if(timecards.begin(), timecards.end(), [&date](TimeCard tc){
 		return date == tc.GetDate();
 	});
 
-	//if (it != timecards.end()) ret = *it;
-	return *it;
+	if (it == timecards.end()) return unique_ptr<TimeCard>{nullptr};
+
+	return unique_ptr<TimeCard>(new TimeCard{*it});
 }
 
 } /* namespace Payroll */

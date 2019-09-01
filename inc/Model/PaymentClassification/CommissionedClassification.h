@@ -12,6 +12,8 @@
 #include "SalesReceipt.h"
 #include <vector>
 #include "Date.h"
+#include "SalesReceipt.h"
+#include <memory>
 
 using namespace std;
 
@@ -32,7 +34,8 @@ public:
 
 	float CalculatePay (Paycheck paycheck);
 
-
+	void AddSalesReceipt (SalesReceipt sr);
+	unique_ptr<SalesReceipt> GetSalesReceipt (Date date);
 
 };
 

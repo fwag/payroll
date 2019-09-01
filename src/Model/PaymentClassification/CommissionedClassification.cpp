@@ -6,6 +6,7 @@
  */
 
 #include "CommissionedClassification.h"
+#include <algorithm>
 
 namespace Payroll {
 
@@ -23,6 +24,23 @@ float CommissionedClassification::CalculatePay(Paycheck paycheck)
 	}
 
 	return salary+(salesTotal*commissionRate*0.01);
+}
+
+void CommissionedClassification::AddSalesReceipt (SalesReceipt sr)
+{
+	salesReceipts.push_back(sr);
+}
+
+unique_ptr<SalesReceipt> CommissionedClassification::GetSalesReceipt (Date date)
+{
+	vector<SalesReceipt>::iterator it;
+	it = find_if(salesReceipts.begin(), salesReceipts.end(), [&date](SalesReceipt sr){
+		return date == sr.GetDate();
+	});
+
+	if (it == salesReceipts.end()) return unique_ptr<SalesReceipt>{nullptr};
+
+	return unique_ptr<SalesReceipt>(new SalesReceipt{*it});
 }
 
 } /* namespace Payroll */

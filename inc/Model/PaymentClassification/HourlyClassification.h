@@ -14,6 +14,7 @@
 #include <ctime>
 #include "Paycheck.h"
 #include "Date.h"
+#include <memory>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ public:
 
 	float CalculatePay (Paycheck paycheck) final;
 	void AddTimeCard(TimeCard card);
-	TimeCard GetTimeCard(Date date);
+	unique_ptr<TimeCard> GetTimeCard(Date date);
 };
 
 } /* namespace Payroll */
