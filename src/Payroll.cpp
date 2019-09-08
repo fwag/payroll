@@ -33,6 +33,7 @@
 #include "ServiceChargeTransaction.h"
 #include "ChangeNameTransaction.h"
 #include "ChangeHourlyTransaction.h"
+#include "ChangeDirectTransaction.h"
 
 using namespace Payroll;
 using namespace std;
@@ -188,4 +189,19 @@ TEST_CASE ( "Change classification to hourly", "[change-to-hourly-classification
 
 	shared_ptr<WeeklySchedule> ps = dynamic_pointer_cast<WeeklySchedule>(e->schedule);
 	REQUIRE(ps != nullptr);
+}
+
+TEST_CASE ( "Change to direct method", "[change-to-direct-method]")
+{
+	int empId = 5;
+	AddHourlyEmployee t (empId, "Mino", "Bejing", 11.0);
+	t.Execute();
+	ChangeDirectTransaction cht (empId, "Goldman&Sachs", "1312321313");
+	cht.Execute();
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	REQUIRE (e != nullptr);
+	shared_ptr<DirectMethod> dc = dynamic_pointer_cast<DirectMethod>(e->method);
+	REQUIRE (dc != nullptr);
+	REQUIRE (dc->GetBank() == "Goldman&Sachs");
+
 }
