@@ -16,7 +16,7 @@ using namespace std;
 namespace Payroll
 {
 
-class ChangeNameTransaction : ChangeEmployeeTransaction
+class ChangeNameTransaction : public ChangeEmployeeTransaction
 {
 private:
 	int empId;
@@ -28,12 +28,6 @@ public:
 	void Change(shared_ptr<Employee> e) {
 		e->name = name;
 	}
-
-	void Execute()
-	{
-		ChangeEmployeeTransaction::Execute();
-	}
-
 };
 
 }

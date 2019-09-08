@@ -32,6 +32,7 @@
 #include "UnionAffiliation.h"
 #include "ServiceChargeTransaction.h"
 #include "ChangeNameTransaction.h"
+#include "ChangeHourlyTransaction.h"
 
 using namespace Payroll;
 using namespace std;
@@ -170,4 +171,21 @@ TEST_CASE ( "Change name transaction test", "[change-name-transaction]")
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
 	REQUIRE ("Bob" == e->name);
+}
+
+TEST_CASE ( "Change classification to hourly", "[change-to-hourly-classification]")
+{
+	int empId = 15;
+	AddCommissionedEmployee t (empId, "Lance", "Home", 2500, 3.2);
+	t.Execute();
+	ChangeHourlyTransaction cht (empId, 27.52);
+	cht.Execute();
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	REQUIRE (e != nullptr);
+	shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->classification);
+	REQUIRE (hc != nullptr);
+	REQUIRE(27.52f == hc->GetHourlyRate());
+
+	shared_ptr<WeeklySchedule> ps = dynamic_pointer_cast<WeeklySchedule>(e->schedule);
+	REQUIRE(ps != nullptr);
 }
