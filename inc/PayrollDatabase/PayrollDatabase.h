@@ -17,11 +17,11 @@ namespace Payroll {
 
 class PayrollDatabase {
 private:
-	static std::map<int, Employee> employees;
+	static std::map<int, shared_ptr<Employee>> employees;
 	static std::map<int, shared_ptr<Employee>> unionMembers;
 
 public:
-	static void AddEmployee (int id, Employee e)
+	static void AddEmployee (int id, shared_ptr<Employee> e)
 	{
 		employees[id] = e;
 	}
@@ -29,7 +29,7 @@ public:
 	static shared_ptr<Employee> GetEmployee (int id) {
 		if (employees.find(id) != employees.end())
 		{
-			return shared_ptr<Employee>(new Employee{employees[id]});
+			return employees[id];
 		} else {
 			return shared_ptr<Employee>{nullptr};
 		}

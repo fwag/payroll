@@ -16,10 +16,10 @@ namespace Payroll {
 
 void AddEmployeeTransaction::Execute()
 {
-	Employee e {empid, name, address};
-	e.classification = MakeClassification();
-	e.schedule = MakeSchedule();
-	e.method = make_shared<HoldMethod>();
+	shared_ptr<Employee> e = make_shared<Employee>(empid, name, address);
+	e->classification = MakeClassification();
+	e->schedule = MakeSchedule();
+	e->method = make_shared<HoldMethod>();
 
 	PayrollDatabase::AddEmployee(empid, e);
 }

@@ -31,6 +31,7 @@
 #include "SalesReceiptTransaction.h"
 #include "UnionAffiliation.h"
 #include "ServiceChargeTransaction.h"
+#include "ChangeNameTransaction.h"
 
 using namespace Payroll;
 using namespace std;
@@ -139,7 +140,7 @@ TEST_CASE ( "Sales receipt transaction test", "[simple-salesreceipt-transaction]
 	REQUIRE(50.0 == sr->GetAmount());
 }
 
-TEST_CASE ( "Service charge transaction test", "[simple-servicecharge-transaction" )
+TEST_CASE ( "Service charge transaction test", "[simple-servicecharge-transaction]" )
 {
 	int empId = 2;
 	AddHourlyEmployee t	{empId, "Bill", "Home", 15.25};
@@ -157,4 +158,16 @@ TEST_CASE ( "Service charge transaction test", "[simple-servicecharge-transactio
 	unique_ptr<ServiceCharge> sc =	af->GetServiceCharge(Date{"08/08/2005"});
 	REQUIRE (sc != nullptr);
 	REQUIRE(12.95f == sc->GetAmount());
+}
+
+TEST_CASE ( "Change name transaction test", "[change-name-transaction]")
+{
+	int empId = 2;
+	AddHourlyEmployee t {empId, "Bill", "Home", 15.25};
+	t.Execute();
+	ChangeNameTransaction cnt {empId, "Bob"};
+	cnt.Execute();
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	REQUIRE (e != nullptr);
+	REQUIRE ("Bob" == e->name);
 }
