@@ -30,6 +30,7 @@
 #include "TimeCardTransaction.h"
 #include "SalesReceiptTransaction.h"
 #include "UnionAffiliation.h"
+#include "ServiceChargeTransaction.h"
 
 using namespace Payroll;
 using namespace std;
@@ -146,18 +147,14 @@ TEST_CASE ( "Service charge transaction test", "[simple-servicecharge-transactio
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
 
-	//UnionAffiliation af;
-	e->affiliation = make_shared<UnionAffiliation>();
+	shared_ptr<UnionAffiliation> af = make_shared<UnionAffiliation>();
+	e->affiliation = af;
 	int memberId = 86; // Maxwell Smart
 	PayrollDatabase::AddUnionMember(memberId, e);
-#if 0
-	ServiceChargeTransaction sct =
-	new ServiceChargeTransaction(
-	memberId, new DateTime(2005, 8, 8), 12.95);
+
+	ServiceChargeTransaction sct {memberId, Date{"08/08/2005"}, 12.95};
 	sct.Execute();
-	ServiceCharge sc =
-	af.GetServiceCharge(new DateTime(2005, 8, 8));
-	Assert.IsNotNull(sc);
-	Assert.AreEqual(12.95, sc.Amount, .001);
-#endif
+	unique_ptr<ServiceCharge> sc =	af->GetServiceCharge(Date{"08/08/2005"});
+	REQUIRE (sc != nullptr);
+	REQUIRE(12.95f == sc->GetAmount());
 }
