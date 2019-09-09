@@ -47,19 +47,22 @@ TEST_CASE( "Payroll - add salaried employee", "[simple-add-salaried-employee]" )
 	t.Execute();
 
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
-	REQUIRE("Bob" == e->name);
+	REQUIRE("Bob" == e->GetName());
 
 	//PaymentClassification pc = e.Classification;
 	//REQUIRE(pc is SalariedClassification);
 
-	shared_ptr<SalariedClassification> sc = dynamic_pointer_cast<SalariedClassification>(e->classification);
+	shared_ptr<PaymentClassification> pc = e->GetClassification();
+	REQUIRE (pc != nullptr);
+
+	shared_ptr<SalariedClassification> sc = dynamic_pointer_cast<SalariedClassification>(e->GetClassification());
 	REQUIRE (sc != nullptr);
 	REQUIRE(1000.00 == sc->GetSalary());
 
-	shared_ptr<MonthlySchedule> ps = dynamic_pointer_cast<MonthlySchedule>(e->schedule);
+	shared_ptr<MonthlySchedule> ps = dynamic_pointer_cast<MonthlySchedule>(e->GetSchedule());
 	REQUIRE (ps != nullptr);
 
-	shared_ptr<HoldMethod> pm = dynamic_pointer_cast<HoldMethod>(e->method);
+	shared_ptr<HoldMethod> pm = dynamic_pointer_cast<HoldMethod>(e->GetMethod());
 	REQUIRE (pm != nullptr);
 }
 
@@ -121,7 +124,7 @@ TEST_CASE ( "Time card transaction test", "[simple-timecard-transaction]" )
 	tct.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE(e != nullptr);
-	shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->classification);
+	shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->GetClassification());
 	REQUIRE(hc != nullptr);
 	unique_ptr<TimeCard> tc = hc->GetTimeCard(Date{"31/07/2005"});
 	REQUIRE(tc != nullptr);
@@ -137,7 +140,7 @@ TEST_CASE ( "Sales receipt transaction test", "[simple-salesreceipt-transaction]
 	tct.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE(e != nullptr);
-	shared_ptr<CommissionedClassification> cc = dynamic_pointer_cast<CommissionedClassification>(e->classification);
+	shared_ptr<CommissionedClassification> cc = dynamic_pointer_cast<CommissionedClassification>(e->GetClassification());
 	REQUIRE(cc != nullptr);
 	unique_ptr<SalesReceipt> sr = cc->GetSalesReceipt(Date{"31/07/2005"});
 	REQUIRE(sr != nullptr);
@@ -153,7 +156,7 @@ TEST_CASE ( "Service charge transaction test", "[simple-servicecharge-transactio
 	REQUIRE (e != nullptr);
 
 	shared_ptr<UnionAffiliation> af = make_shared<UnionAffiliation>();
-	e->affiliation = af;
+	e->SetAffiliation(af);
 	int memberId = 86; // Maxwell Smart
 	PayrollDatabase::AddUnionMember(memberId, e);
 
@@ -173,7 +176,7 @@ TEST_CASE ( "Change name transaction test", "[change-name-transaction]")
 	cnt.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
-	REQUIRE ("Bob" == e->name);
+	REQUIRE ("Bob" == e->GetName());
 }
 
 TEST_CASE ( "Change classification to hourly", "[change-to-hourly-classification]")
@@ -185,11 +188,11 @@ TEST_CASE ( "Change classification to hourly", "[change-to-hourly-classification
 	cht.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
-	shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->classification);
+	shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->GetClassification());
 	REQUIRE (hc != nullptr);
 	REQUIRE(27.52f == hc->GetHourlyRate());
 
-	shared_ptr<WeeklySchedule> ps = dynamic_pointer_cast<WeeklySchedule>(e->schedule);
+	shared_ptr<WeeklySchedule> ps = dynamic_pointer_cast<WeeklySchedule>(e->GetSchedule());
 	REQUIRE(ps != nullptr);
 }
 
@@ -202,7 +205,7 @@ TEST_CASE ( "Change to direct method", "[change-to-direct-method]")
 	cht.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
-	shared_ptr<DirectMethod> dc = dynamic_pointer_cast<DirectMethod>(e->method);
+	shared_ptr<DirectMethod> dc = dynamic_pointer_cast<DirectMethod>(e->GetMethod());
 	REQUIRE (dc != nullptr);
 	REQUIRE (dc->GetBank() == "Goldman&Sachs");
 
@@ -218,7 +221,7 @@ TEST_CASE ( "Change to union member", "[change-to-union-member]" )
 	cmt.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
-	shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->affiliation);
+	shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->GetAffiliation());
 	REQUIRE(ua != nullptr);
 	REQUIRE(99.42f == ua->GetDues());
 	shared_ptr<Employee> member = PayrollDatabase::GetUnionMember(memberId);
@@ -236,7 +239,7 @@ TEST_CASE ( "Change to not affiliated member", "[change-to-unaffiliated-member]"
 	cmt.Execute();
 	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
 	REQUIRE (e != nullptr);
-	shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->affiliation);
+	shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->GetAffiliation());
 	REQUIRE(ua != nullptr);
 	REQUIRE(89.42f == ua->GetDues());
 	shared_ptr<Employee> member = PayrollDatabase::GetUnionMember(memberId);

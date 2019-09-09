@@ -23,8 +23,8 @@ public:
 protected:
 	void Change(shared_ptr<Employee> e) final
 	{
-		e->classification = GetClassification();
-		e->schedule = GetSchedule();
+		e->SetClassification(GetClassification());
+		e->SetSchedule(GetSchedule());
 	}
 
 	virtual shared_ptr<PaymentClassification> GetClassification() = 0;

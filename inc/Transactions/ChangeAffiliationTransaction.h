@@ -21,7 +21,7 @@ protected:
 	{
 		RecordMembership(e);
 		shared_ptr<Affiliation> af = GetAffiliation();
-		e->affiliation = af;
+		e->SetAffiliation(af);
 	}
 
 	virtual shared_ptr<Affiliation> GetAffiliation() = 0;

@@ -32,7 +32,7 @@ public:
 
 		if (e != nullptr)
 		{
-			shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->classification);
+			shared_ptr<HourlyClassification> hc = dynamic_pointer_cast<HourlyClassification>(e->GetClassification());
 
 			if (hc != nullptr)
 			{

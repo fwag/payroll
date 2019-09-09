@@ -30,7 +30,7 @@ public:
 
 		if (e != nullptr)
 		{
-			shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->affiliation);
+			shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->GetAffiliation());
 			if (ua != nullptr)
 			{
 				ServiceCharge sc{date, amount};

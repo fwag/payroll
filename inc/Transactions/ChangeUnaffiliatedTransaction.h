@@ -29,7 +29,7 @@ public:
 protected:
 	void RecordMembership(shared_ptr<Employee> e)
 	{
-		shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->affiliation);
+		shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->GetAffiliation());
 		if (ua != nullptr)
 		{
 			PayrollDatabase::RemoveUnionMember(ua->GetMemberId());

@@ -20,7 +20,7 @@ public:
 
 protected:
 	void Change(shared_ptr<Employee> e) {
-		e->method = GetMethod();
+		e->SetMethod(GetMethod());
 	}
 
 	virtual shared_ptr<PaymentMethod> GetMethod() = 0;

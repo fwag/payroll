@@ -27,7 +27,7 @@ public:
 
 protected:
 	void Change(shared_ptr<Employee> e) {
-		e->name = name;
+		e->SetName(name);
 	}
 };
 

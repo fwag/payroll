@@ -28,7 +28,7 @@ public:
 
 		if (e != nullptr)
 		{
-			shared_ptr<CommissionedClassification> cc = dynamic_pointer_cast<CommissionedClassification>(e->classification);
+			shared_ptr<CommissionedClassification> cc = dynamic_pointer_cast<CommissionedClassification>(e->GetClassification());
 
 			if (cc != nullptr)
 			{
