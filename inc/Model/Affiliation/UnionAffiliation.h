@@ -33,6 +33,9 @@ public:
 
 	UnionAffiliation() : memberId{-1}, dues{0.0} {}
 
+	int GetMemberId() { return memberId; }
+	float GetDues() { return dues; }
+
 	void AddServiceCharge(ServiceCharge sc);
 	unique_ptr<ServiceCharge> GetServiceCharge(Date date);
 

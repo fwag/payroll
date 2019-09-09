@@ -18,6 +18,7 @@ class ChangeMethodTransaction : public ChangeEmployeeTransaction
 public:
 	ChangeMethodTransaction(int empId) : ChangeEmployeeTransaction(empId) {}
 
+protected:
 	void Change(shared_ptr<Employee> e) {
 		e->method = GetMethod();
 	}

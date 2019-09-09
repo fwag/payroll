@@ -21,8 +21,6 @@ private:
 public:
 	ChangeEmployeeTransaction(int empId) : empId{empId} {}
 
-	virtual void Change(shared_ptr<Employee> e) = 0;
-
 	void Execute()
 	{
 		shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
@@ -34,6 +32,8 @@ public:
 			runtime_error("No such employee");
 		}
 	}
+protected:
+	virtual void Change(shared_ptr<Employee> e) = 0;
 };
 
 }

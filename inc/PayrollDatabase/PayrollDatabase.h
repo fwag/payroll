@@ -50,6 +50,11 @@ public:
 			return shared_ptr<Employee>{nullptr};
 		}
 	}
+
+	static void RemoveUnionMember (int memId)
+	{
+		unionMembers.erase(memId);
+	}
 };
 
 } /* namespace Payroll */

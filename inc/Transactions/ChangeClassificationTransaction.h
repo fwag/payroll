@@ -20,13 +20,13 @@ public:
 		ChangeEmployeeTransaction(empId)
 	{}
 
+protected:
 	void Change(shared_ptr<Employee> e) final
 	{
 		e->classification = GetClassification();
 		e->schedule = GetSchedule();
 	}
 
-protected:
 	virtual shared_ptr<PaymentClassification> GetClassification() = 0;
 	virtual shared_ptr<PaymentSchedule> GetSchedule() = 0;
 

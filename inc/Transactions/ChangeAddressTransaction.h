@@ -22,6 +22,7 @@ private:
 public:
 	ChangeNameTransaction(int empId, string address) : ChangeEmployeeTransaction(empId), address{address} {}
 
+protected:
 	void Change(shared_ptr<Employee> e) {
 		e->address = address;
 	}

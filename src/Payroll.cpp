@@ -34,6 +34,8 @@
 #include "ChangeNameTransaction.h"
 #include "ChangeHourlyTransaction.h"
 #include "ChangeDirectTransaction.h"
+#include "ChangeMemberTransaction.h"
+#include "ChangeUnaffiliatedTransaction.h"
 
 using namespace Payroll;
 using namespace std;
@@ -204,4 +206,44 @@ TEST_CASE ( "Change to direct method", "[change-to-direct-method]")
 	REQUIRE (dc != nullptr);
 	REQUIRE (dc->GetBank() == "Goldman&Sachs");
 
+}
+
+TEST_CASE ( "Change to union member", "[change-to-union-member]" )
+{
+	int empId = 8;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	int memberId = 7743;
+	ChangeMemberTransaction cmt (empId, memberId, 99.42);
+	cmt.Execute();
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	REQUIRE (e != nullptr);
+	shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->affiliation);
+	REQUIRE(ua != nullptr);
+	REQUIRE(99.42f == ua->GetDues());
+	shared_ptr<Employee> member = PayrollDatabase::GetUnionMember(memberId);
+	REQUIRE (member != nullptr);
+	REQUIRE (e == member);
+}
+
+TEST_CASE ( "Change to not affiliated member", "[change-to-unaffiliated-member]" )
+{
+	int empId = 13;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	int memberId = 7745;
+	ChangeMemberTransaction cmt (empId, memberId, 89.42);
+	cmt.Execute();
+	shared_ptr<Employee> e = PayrollDatabase::GetEmployee(empId);
+	REQUIRE (e != nullptr);
+	shared_ptr<UnionAffiliation> ua = dynamic_pointer_cast<UnionAffiliation>(e->affiliation);
+	REQUIRE(ua != nullptr);
+	REQUIRE(89.42f == ua->GetDues());
+	shared_ptr<Employee> member = PayrollDatabase::GetUnionMember(memberId);
+	REQUIRE (member != nullptr);
+	REQUIRE (e == member);
+	ChangeUnaffiliatedTransaction cmt2 (empId, memberId);
+	cmt2.Execute();
+	shared_ptr<Employee> member2 = PayrollDatabase::GetUnionMember(memberId);
+	REQUIRE (member2 == nullptr);
 }
