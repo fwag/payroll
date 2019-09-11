@@ -38,6 +38,7 @@ public:
 			{
 				Date startDate = e->GetPayPeriodStartDate(payDate);
 				shared_ptr<Paycheck> pc = make_shared<Paycheck>(startDate, payDate);
+				//cout << e->GetId() << endl;
 				paychecks[e->GetId()] = pc;
 				e->Payday(pc);
 			}

@@ -281,3 +281,25 @@ TEST_CASE ("Pay single salaried employee on wrong date", "[pay-single-salaried-o
 	shared_ptr<Paycheck> pc = pt.GetPaycheck(empId);
 	REQUIRE(pc == nullptr);
 }
+
+void ValidateHourlyPaycheck(PaydayTransaction pt, int empid, Date payDate, float pay)
+{
+	shared_ptr<Paycheck> pc = pt.GetPaycheck(empid);
+	REQUIRE (pc != nullptr);
+	REQUIRE(payDate == pc->GetPaydate());
+	REQUIRE(pay == pc->GetGrossPay());
+	//REQUIRE("Hold" == pc->GetField("Disposition"));
+	REQUIRE(0.0f == pc->GetDeductions());
+	REQUIRE(pay == pc->GetNetPay());
+}
+
+TEST_CASE("Paying single hourly employee no timecards", "[pay-single-hourly-employee-no-timecards]")
+{
+	int empId = 32;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25f);
+	t.Execute();
+	Date payDate ("09/11/2001");
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	ValidateHourlyPaycheck(pt, empId, payDate, 0.0f);
+}
