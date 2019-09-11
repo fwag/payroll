@@ -9,12 +9,13 @@
 #define HOLDMETHOD_H_
 
 #include "PaymentMethod.h"
+#include "Paycheck.h"
 
 namespace Payroll {
 
 class HoldMethod : public PaymentMethod {
 public:
-	void pay() final { }
+	void Pay(shared_ptr<Paycheck> paycheck) final {}
 };
 
 } /* namespace Payroll */

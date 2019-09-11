@@ -15,6 +15,7 @@
 #include "PaymentSchedule.h"
 #include "PaymentMethod.h"
 #include "Affiliation.h"
+#include "NoAffiliation.h"
 
 using namespace std;
 
@@ -36,13 +37,13 @@ public:
 		id{-1},
 		name{""},
 		address{""}
-	{}
+	{ affiliation = make_shared<NoAffiliation>();}
 
 	Employee(int id, string name, string address) :
 		id{id},
 		name{name},
 		address{address}
-	{}
+	{ affiliation = make_shared<NoAffiliation>();}
 
 	int GetId() { return id; }
 	string GetName() { return name; }
@@ -59,7 +60,26 @@ public:
 	void SetMethod(shared_ptr<PaymentMethod> method) { this->method = method; }
 	void SetAffiliation(shared_ptr<Affiliation> affiliation) { this->affiliation = affiliation; }
 
+	bool IsPayday(Date date)
+	{
+		return schedule->IsPayday(date);
+	}
 
+	Date GetPayPeriodStartDate (Date date)
+	{
+		return schedule->GetPayPeriodStartDate(date);
+	}
+
+	void Payday(shared_ptr<Paycheck> paycheck)
+	{
+		float grossPay = classification->CalculatePay(paycheck);
+		float deductions = affiliation->CalculateDeductions(paycheck);
+		float netPay = grossPay - deductions;
+		paycheck->SetGrossPay(grossPay);
+		paycheck->SetDeductions(deductions);
+		paycheck->SetNetPay(netPay);
+		method->Pay(paycheck);
+	}
 	/*Employee& operator=(const Payroll::Employee& e)
 	{
 		id = e.id;

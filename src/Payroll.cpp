@@ -36,6 +36,7 @@
 #include "ChangeDirectTransaction.h"
 #include "ChangeMemberTransaction.h"
 #include "ChangeUnaffiliatedTransaction.h"
+#include "PaydayTransaction.h"
 
 using namespace Payroll;
 using namespace std;
@@ -83,7 +84,7 @@ TEST_CASE( "Payroll - test hourly classification", "[simple-hourly-classificatio
 	   Date startDate = ws.GetPayPeriodStartDate(date);
 	   REQUIRE (date >= startDate);
 
-	   Paycheck pc{startDate, date};
+	   shared_ptr<Paycheck> pc = make_shared<Paycheck>(startDate, date);
 	   REQUIRE (hc.CalculatePay(pc) == 154.0);
 }
 
@@ -249,4 +250,34 @@ TEST_CASE ( "Change to not affiliated member", "[change-to-unaffiliated-member]"
 	cmt2.Execute();
 	shared_ptr<Employee> member2 = PayrollDatabase::GetUnionMember(memberId);
 	REQUIRE (member2 == nullptr);
+}
+
+
+TEST_CASE ("Pay single salaried employee", "[pay-single-salaried-employee]")
+{
+	int empId = 23;
+	AddSalariedEmployee t (empId, "Bob", "Home", 1000.00);
+	t.Execute();
+	Date payDate ("30/11/2001");
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	shared_ptr<Paycheck> pc = pt.GetPaycheck(empId);
+	REQUIRE(pc != nullptr);
+	REQUIRE(payDate == pc->GetPaydate());
+	REQUIRE(1000.0f == pc->GetGrossPay());
+	//Assert.AreEqual("Hold", pc.GetField("Disposition"));
+	REQUIRE(0.0f == pc->GetDeductions());
+	REQUIRE(1000.0f == pc->GetNetPay());
+}
+
+TEST_CASE ("Pay single salaried employee on wrong date", "[pay-single-salaried-on-wrong-date]")
+{
+	int empId = 24;
+	AddSalariedEmployee t (empId, "Bob", "Home", 1000.00);
+	t.Execute();
+	Date payDate ("29/11/2010");
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	shared_ptr<Paycheck> pc = pt.GetPaycheck(empId);
+	REQUIRE(pc == nullptr);
 }

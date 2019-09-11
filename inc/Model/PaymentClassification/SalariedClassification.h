@@ -20,7 +20,7 @@ private:
 public:
 	SalariedClassification(float salary) : salary{salary} {};
 
-	float CalculatePay (Paycheck paycheck);
+	float CalculatePay (shared_ptr<Paycheck> paycheck);
 	float GetSalary() { return salary; }
 };
 

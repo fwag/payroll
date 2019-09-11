@@ -10,6 +10,7 @@
 
 #include "PaymentMethod.h"
 #include <string>
+#include "Paycheck.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ namespace Payroll {
 class MailMethod : public PaymentMethod {
 public:
 	MailMethod(string address) : address{address} {}
-	void pay() final {}
+	void Pay(shared_ptr<Paycheck> paycheck) final {}
 	string address;
 
 };

@@ -16,6 +16,8 @@ namespace Payroll {
 class PaymentSchedule {
 public:
 	virtual bool IsPayday(Date date) = 0;
+	virtual Date GetPayPeriodStartDate(Date date)= 0;
+
 };
 
 } /* namespace Payroll */

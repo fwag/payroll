@@ -8,11 +8,14 @@
 #ifndef PAYMENTMETHOD_H_
 #define PAYMENTMETHOD_H_
 
+#include "Paycheck.h"
+#include <memory>
+
 namespace Payroll {
 
 class PaymentMethod {
 public:
-	virtual void pay() = 0;
+	virtual void Pay(shared_ptr<Paycheck> paycheck) = 0;
 };
 
 } /* namespace Payroll */

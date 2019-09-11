@@ -9,6 +9,7 @@
 #define DIRECTMETHOD_H_
 
 #include <string>
+#include "Paycheck.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ public:
 	string GetBank() { return bank; }
 	string GetAccount() { return account; }
 
-	void pay() final {}
+	void Pay(shared_ptr<Paycheck> paycheck) final {}
 };
 
 }

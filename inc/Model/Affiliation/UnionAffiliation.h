@@ -12,6 +12,7 @@
 #include <memory>
 #include "Affiliation.h"
 #include "ServiceCharge.h"
+#include <iostream>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ public:
 	void AddServiceCharge(ServiceCharge sc);
 	unique_ptr<ServiceCharge> GetServiceCharge(Date date);
 
-	float CalculateDeductions(Paycheck paycheck) final;
+	float CalculateDeductions(shared_ptr<Paycheck> paycheck) final;
 };
 }
 

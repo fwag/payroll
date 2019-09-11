@@ -32,7 +32,7 @@ public:
 		commissionRate{commissionRate}
 	{}
 
-	float CalculatePay (Paycheck paycheck);
+	float CalculatePay (shared_ptr<Paycheck> paycheck);
 
 	void AddSalesReceipt (SalesReceipt sr);
 	unique_ptr<SalesReceipt> GetSalesReceipt (Date date);

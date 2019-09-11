@@ -10,6 +10,7 @@
 
 #include <ctime>
 #include "Paycheck.h"
+#include <memory>
 
 namespace Payroll {
 
@@ -18,7 +19,7 @@ public:
 	PaymentClassification();
 	virtual ~PaymentClassification();
 
-	virtual float CalculatePay(Paycheck paycheck) = 0;
+	virtual float CalculatePay(shared_ptr<Paycheck> paycheck) = 0;
 
 };
 

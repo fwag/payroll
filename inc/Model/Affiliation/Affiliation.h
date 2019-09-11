@@ -14,7 +14,7 @@ namespace Payroll {
 
 class Affiliation {
 public:
-	virtual float CalculateDeductions(Paycheck paycheck) = 0;
+	virtual float CalculateDeductions(shared_ptr<Paycheck> paycheck) = 0;
 };
 }
 

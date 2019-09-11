@@ -10,14 +10,14 @@
 
 namespace Payroll {
 
-float CommissionedClassification::CalculatePay(Paycheck paycheck)
+float CommissionedClassification::CalculatePay(shared_ptr<Paycheck> paycheck)
 {
 	vector<SalesReceipt>::iterator it;
 	float salesTotal = 0.0;
 
 	for (it = salesReceipts.begin(); it != salesReceipts.end(); it++)
 	{
-		if (paycheck.IsInPayPeriod((*it).GetDate()))
+		if (paycheck->IsInPayPeriod((*it).GetDate()))
 		{
 			salesTotal += (*it).GetAmount();
 		}

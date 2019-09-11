@@ -40,17 +40,17 @@ int UnionAffiliation::NumberOfFridaysInPayPeriod(Date payPeriodStart, Date payPe
 	return fridays;
 }
 
-float UnionAffiliation::CalculateDeductions(Paycheck paycheck)
+float UnionAffiliation::CalculateDeductions(shared_ptr<Paycheck> paycheck)
 {
 	double totalDues = 0;
 
-	int fridays = NumberOfFridaysInPayPeriod(paycheck.PayPeriodStartDate(), paycheck.PayPeriodEndDate());
+	int fridays = NumberOfFridaysInPayPeriod(paycheck->PayPeriodStartDate(), paycheck->PayPeriodEndDate());
 	totalDues = dues * fridays;
 
 	vector<ServiceCharge>::iterator it;
 	for(it = serviceCharges.begin(); it != serviceCharges.end(); it++)
 	{
-		if(paycheck.IsInPayPeriod((*it).GetDate()))
+		if(paycheck->IsInPayPeriod((*it).GetDate()))
 			totalDues += (*it).GetAmount();
 	}
 

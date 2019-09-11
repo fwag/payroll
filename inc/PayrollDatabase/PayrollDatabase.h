@@ -55,6 +55,13 @@ public:
 	{
 		unionMembers.erase(memId);
 	}
+
+	static void GetAllEmployeeIds (vector<int>& ids)
+	{
+		ids.reserve(employees.size());
+		for(auto const& imap: employees)
+			ids.push_back(imap.first);
+	}
 };
 
 } /* namespace Payroll */

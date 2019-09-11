@@ -9,7 +9,7 @@
 
 namespace Payroll {
 
-float SalariedClassification::CalculatePay(Paycheck paycheck)
+float SalariedClassification::CalculatePay(shared_ptr<Paycheck> paycheck)
 {
 	(void)paycheck;
 

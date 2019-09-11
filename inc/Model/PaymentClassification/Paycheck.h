@@ -18,6 +18,9 @@ class Paycheck
 private:
 	Date payDate;
 	Date payPeriodStartDate;
+	float grossPay;
+	float deductions;
+	float netPay;
 
 public:
 	Paycheck(Date payPeriodStartDate, Date payDate) : payDate{payDate},
@@ -31,6 +34,17 @@ public:
     {
         return (theDate >= PayPeriodStartDate()) && (theDate <= PayPeriodEndDate());
     }
+
+    Date GetPaydate() { return payDate; }
+
+    float GetGrossPay() { return grossPay; }
+    void SetGrossPay(float grossPay) { this->grossPay = grossPay; }
+
+    float GetDeductions() { return deductions; }
+    void SetDeductions(float deductions) { this->deductions = deductions; }
+
+    float GetNetPay() { return netPay; }
+    void SetNetPay(float netPay) { this->netPay = netPay; }
 };
 
 }

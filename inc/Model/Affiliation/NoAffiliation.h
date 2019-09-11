@@ -15,7 +15,10 @@ namespace Payroll
 	class NoAffiliation : public Affiliation {
 	public:
 		NoAffiliation() {}
-		float CalculateDeductions(Paycheck paycheck) { return 0.0f; }
+		float CalculateDeductions(shared_ptr<Paycheck> paycheck) {
+			(void)paycheck;
+			return 0.0f;
+		}
 
 	};
 }

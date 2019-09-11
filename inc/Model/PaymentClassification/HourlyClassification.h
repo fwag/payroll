@@ -35,7 +35,7 @@ public:
 
 	float GetHourlyRate() { return hourlyRate; }
 
-	float CalculatePay (Paycheck paycheck) final;
+	float CalculatePay (shared_ptr<Paycheck> paycheck) final;
 	void AddTimeCard(TimeCard card);
 	unique_ptr<TimeCard> GetTimeCard(Date date);
 };
