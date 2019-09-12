@@ -265,7 +265,7 @@ TEST_CASE ("Pay single salaried employee", "[pay-single-salaried-employee]")
 	REQUIRE(pc != nullptr);
 	REQUIRE(payDate == pc->GetPaydate());
 	REQUIRE(1000.0f == pc->GetGrossPay());
-	//Assert.AreEqual("Hold", pc.GetField("Disposition"));
+	REQUIRE("Hold" == pc->GetField("Disposition"));
 	REQUIRE(0.0f == pc->GetDeductions());
 	REQUIRE(1000.0f == pc->GetNetPay());
 }
@@ -288,7 +288,7 @@ void ValidateHourlyPaycheck(PaydayTransaction pt, int empid, Date payDate, float
 	REQUIRE (pc != nullptr);
 	REQUIRE(payDate == pc->GetPaydate());
 	REQUIRE(pay == pc->GetGrossPay());
-	//REQUIRE("Hold" == pc->GetField("Disposition"));
+	REQUIRE("Hold" == pc->GetField("Disposition"));
 	REQUIRE(0.0f == pc->GetDeductions());
 	REQUIRE(pay == pc->GetNetPay());
 }
@@ -302,4 +302,132 @@ TEST_CASE("Paying single hourly employee no timecards", "[pay-single-hourly-empl
 	PaydayTransaction pt (payDate);
 	pt.Execute();
 	ValidateHourlyPaycheck(pt, empId, payDate, 0.0f);
+}
+
+TEST_CASE ("Pay single hourly employee one timecard", "[pay-single-hourly-employee-one-timecard]")
+{
+	int empId = 33;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	Date payDate ("09/11/2001");//Friday
+	TimeCardTransaction tc (payDate, 2.0, empId);
+	tc.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	ValidateHourlyPaycheck(pt, empId, payDate, 30.5f);
+}
+
+TEST_CASE ("Pay single hourly employee overtime one timecard", "[pay-single-hourly-employee-overtime-one-timecard]")
+{
+	int empId = 2;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	Date payDate ("09/11/2001");//Friday
+	TimeCardTransaction tc (payDate, 9.0, empId);
+	tc.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	ValidateHourlyPaycheck(pt, empId, payDate, (8 + 1.5)*15.25);
+}
+
+TEST_CASE ("Pay single hourly employee on wrong date", "[pay-single-hourly-employee-on-wrong-date]")
+{
+	int empId = 2;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	Date payDate ("08/11/2001"); // Thursday
+	TimeCardTransaction tc (payDate, 9.0, empId);
+	tc.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	shared_ptr<Paycheck> pc = pt.GetPaycheck(empId);
+	REQUIRE (pc == nullptr);
+}
+
+TEST_CASE ("Pay single hourly employee two timecards", "[pay-single-hourly-employee-two-timecards]")
+{
+	int empId = 2;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	Date payDate ("09/11/2001");//Friday
+	TimeCardTransaction tc (payDate, 2.0, empId);
+	tc.Execute();
+	TimeCardTransaction tc2 (payDate.AddDays(-1), 5.0,empId);
+	tc2.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	ValidateHourlyPaycheck(pt, empId, payDate, 7*15.25);
+}
+
+TEST_CASE ("Test pay single hourly employee with timecards spanning two pay periods",
+		"[test-pay-single-hourly-employee-with-timecards-spanning-two-pay-periods]")
+{
+	int empId = 2;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.25);
+	t.Execute();
+	Date payDate ("09/11/2001");//Friday
+	Date dateInPreviousPayPeriod ("2/11/2001");
+	TimeCardTransaction tc (payDate, 2.0, empId);
+	tc.Execute();
+	TimeCardTransaction tc2 (dateInPreviousPayPeriod, 5.0, empId);
+	tc2.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	ValidateHourlyPaycheck(pt, empId, payDate, 2*15.25);
+}
+
+TEST_CASE("Hourly union member service charge",
+		"[hourly-union-member-service-charge]")
+{
+	int empId = 35;
+	AddHourlyEmployee t (empId, "Bill", "Home", 15.24);
+	t.Execute();
+	int memberId = 7734;
+	ChangeMemberTransaction cmt (empId, memberId, 9.42);
+	cmt.Execute();
+	Date payDate ("09/11/2001");//Friday
+	ServiceChargeTransaction sct (memberId, payDate, 19.42);
+	sct.Execute();
+	TimeCardTransaction tct (payDate, 8.0, empId);
+	tct.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	shared_ptr<Paycheck> pc = pt.GetPaycheck(empId);
+	REQUIRE(pc != nullptr);
+	REQUIRE(payDate == pc->PayPeriodEndDate());
+	REQUIRE(8*15.24f == pc->GetGrossPay());
+	REQUIRE("Hold" ==  pc->GetField("Disposition"));
+	REQUIRE((9.42f + 19.42f) == pc->GetDeductions());
+	REQUIRE((float)((8*15.24f)-(9.42f + 19.42f)) == pc->GetNetPay());
+}
+
+TEST_CASE("Service charges spanning multiple pay periods",
+		"[service-charges-spanning-multiple-pay-periods]")
+{
+	int empId = 36;
+	AddHourlyEmployee t (	empId, "Bill", "Home", 15.24);
+	t.Execute();
+	int memberId = 7734;
+	ChangeMemberTransaction cmt (empId, memberId, 9.42);
+	cmt.Execute();
+	Date payDate ("09/11/2001");//Friday
+	Date earlyDate ("02/11/2001"); // previous Friday
+	Date lateDate ("16/11/2001"); // next Friday
+	ServiceChargeTransaction sct (memberId, payDate, 19.42);
+	sct.Execute();
+	ServiceChargeTransaction sctEarly (memberId,earlyDate,100.00);
+	sctEarly.Execute();
+	ServiceChargeTransaction sctLate (memberId,lateDate,200.00);
+	sctLate.Execute();
+	TimeCardTransaction tct (payDate, 8.0, empId);
+	tct.Execute();
+	PaydayTransaction pt (payDate);
+	pt.Execute();
+	shared_ptr<Paycheck> pc = pt.GetPaycheck(empId);
+	REQUIRE(pc != nullptr);
+	REQUIRE(payDate == pc->PayPeriodEndDate());
+	REQUIRE(8*15.24f == pc->GetGrossPay());
+	REQUIRE("Hold" == pc->GetField("Disposition"));
+	REQUIRE((9.42f + 19.42f) == pc->GetDeductions());
+	REQUIRE((float)((8*15.24) - (9.42 + 19.42)) == pc->GetNetPay());
 }

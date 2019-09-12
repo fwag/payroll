@@ -27,7 +27,10 @@ public:
 	string GetBank() { return bank; }
 	string GetAccount() { return account; }
 
-	void Pay(shared_ptr<Paycheck> paycheck) final {}
+	void Pay(shared_ptr<Paycheck> paycheck) final {
+		paycheck->SetField("Disposition", "Direct");
+
+	}
 };
 
 }

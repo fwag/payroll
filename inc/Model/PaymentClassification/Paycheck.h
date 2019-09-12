@@ -9,6 +9,8 @@
 #define PAYCHECK_H_
 
 #include "Date.h"
+#include <map>
+#include <string>
 
 namespace Payroll
 {
@@ -21,6 +23,7 @@ private:
 	float grossPay;
 	float deductions;
 	float netPay;
+	map<string, string> fields;
 
 public:
 	Paycheck(Date payPeriodStartDate, Date payDate) : payDate{payDate},
@@ -45,6 +48,16 @@ public:
 
     float GetNetPay() { return netPay; }
     void SetNetPay(float netPay) { this->netPay = netPay; }
+
+    void SetField(string fieldName, string value)
+	{
+		fields[fieldName] = value;
+	}
+
+    string GetField(string fieldName)
+	{
+		return fields[fieldName];
+	}
 };
 
 }

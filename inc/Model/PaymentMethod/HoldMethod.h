@@ -15,7 +15,9 @@ namespace Payroll {
 
 class HoldMethod : public PaymentMethod {
 public:
-	void Pay(shared_ptr<Paycheck> paycheck) final {}
+	void Pay(shared_ptr<Paycheck> paycheck) final {
+		paycheck->SetField("Disposition", "Hold");
+	}
 };
 
 } /* namespace Payroll */

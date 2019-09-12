@@ -17,10 +17,13 @@ using namespace std;
 namespace Payroll {
 
 class MailMethod : public PaymentMethod {
+private:
+	string address;
 public:
 	MailMethod(string address) : address{address} {}
-	void Pay(shared_ptr<Paycheck> paycheck) final {}
-	string address;
+	void Pay(shared_ptr<Paycheck> paycheck) final {
+		paycheck->SetField("Disposition", "Mail");
+	}
 
 };
 

@@ -14,9 +14,12 @@ float HourlyClassification::CalculateDailyRate (int hours)
 {
 	float pay = 0.0;
 	if (hours > 8)
+	{
 		pay = (hours-8)*1.5*hourlyRate;
+		hours = 8;
+	}
 
-	pay += 8*hourlyRate;
+	pay += hours*hourlyRate;
 
 	return pay;
 }
